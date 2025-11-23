@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
     <style>
         :root {
@@ -64,8 +65,46 @@
 
         #intro-screen.hidden {
             opacity: 0;
-            transform: scale(1.2);
+            transform: scale(1.2) rotateY(15deg);
             pointer-events: none;
+            filter: blur(20px);
+        }
+        
+        /* Enhanced intro background effects */
+        .intro-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .intro-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--primary);
+            animation: floatParticle 15s infinite;
+        }
+        
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(100vh) translateX(0) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+                transform: translateY(90vh) translateX(20px) scale(1);
+            }
+            90% {
+                opacity: 1;
+                transform: translateY(10vh) translateX(-20px) scale(1);
+            }
+            100% {
+                transform: translateY(0) translateX(0) scale(0);
+                opacity: 0;
+            }
         }
 
         .intro-bg {
@@ -366,13 +405,13 @@
             text-transform: uppercase;
         }
 
-        /* Enhanced Navigation with Scroll Effects */
+        /* Enhanced Navigation with Scroll Effects - HIDDEN */
         nav {
             position: fixed;
             top: 0;
             width: 100%;
             padding: 25px 50px;
-            display: flex;
+            display: none; /* Hidden as requested */
             justify-content: space-between;
             align-items: center;
             z-index: 1000;
@@ -380,6 +419,8 @@
             backdrop-filter: blur(0px);
             border-bottom: 1px solid transparent;
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            pointer-events: none;
         }
 
         nav.scrolled {
@@ -464,13 +505,15 @@
         /* Staggered Reveal Animation */
         .reveal-3d {
             opacity: 0;
-            transform: perspective(1500px) translateZ(-200px) translateY(80px) rotateX(25deg);
+            transform: perspective(1500px) translateZ(-200px) translateY(80px) rotateX(25deg) scale(0.8);
             transition: all 1.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            filter: blur(10px);
         }
 
         .reveal-3d.active {
             opacity: 1;
-            transform: perspective(1500px) translateZ(0) translateY(0) rotateX(0);
+            transform: perspective(1500px) translateZ(0) translateY(0) rotateX(0) scale(1);
+            filter: blur(0);
         }
 
         /* Add stagger delays */
@@ -478,6 +521,30 @@
         .reveal-3d:nth-child(2) { transition-delay: 0.2s; }
         .reveal-3d:nth-child(3) { transition-delay: 0.3s; }
         .reveal-3d:nth-child(4) { transition-delay: 0.4s; }
+        .reveal-3d:nth-child(5) { transition-delay: 0.5s; }
+        .reveal-3d:nth-child(6) { transition-delay: 0.6s; }
+        
+        /* Advanced section animations */
+        section {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 204, 0.05), transparent);
+            transition: left 0.8s ease;
+            z-index: 0;
+        }
+        
+        section.visible::before {
+            left: 100%;
+        }
 
         /* Enhanced Tilt Cards */
         .tilt-card {
@@ -534,10 +601,27 @@
         }
 
         .tilt-card:hover {
-            transform: perspective(1000px) scale3d(1.03, 1.03, 1.03);
+            transform: perspective(1000px) scale3d(1.05, 1.05, 1.05) translateZ(20px);
             box-shadow: 0 30px 90px -10px rgba(0, 0, 0, 0.9), 
                         0 0 70px rgba(0, 255, 204, 0.3) inset,
-                        0 0 50px rgba(0, 255, 204, 0.2);
+                        0 0 50px rgba(0, 255, 204, 0.2),
+                        0 0 100px rgba(0, 255, 204, 0.1);
+            animation: cardPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes cardPulse {
+            0%, 100% {
+                box-shadow: 0 30px 90px -10px rgba(0, 0, 0, 0.9), 
+                            0 0 70px rgba(0, 255, 204, 0.3) inset,
+                            0 0 50px rgba(0, 255, 204, 0.2),
+                            0 0 100px rgba(0, 255, 204, 0.1);
+            }
+            50% {
+                box-shadow: 0 30px 90px -10px rgba(0, 0, 0, 0.9), 
+                            0 0 70px rgba(0, 255, 204, 0.5) inset,
+                            0 0 80px rgba(0, 255, 204, 0.4),
+                            0 0 120px rgba(0, 255, 204, 0.2);
+            }
         }
 
         .tilt-content {
@@ -553,6 +637,32 @@
             text-align: center;
             position: relative;
             padding-top: 60px;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(0, 255, 204, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: heroPulse 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes heroPulse {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.5);
+                opacity: 0.8;
+            }
         }
 
         .glitch-text {
@@ -562,27 +672,85 @@
             margin-bottom: 15px;
             position: relative;
             text-shadow: 3px 3px 0px rgba(0, 255, 204, 0.4),
-                         -3px -3px 0px rgba(0, 153, 255, 0.4);
-            animation: glitch 4s infinite;
+                         -3px -3px 0px rgba(0, 153, 255, 0.4),
+                         0 0 30px rgba(0, 255, 204, 0.3);
+            animation: glitch 4s infinite, textGlow 3s ease-in-out infinite;
+            transform-style: preserve-3d;
+        }
+        
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .glitch-text::before {
+            color: var(--primary);
+            z-index: -1;
+            animation: glitchBefore 4s infinite;
+            clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+        }
+        
+        .glitch-text::after {
+            color: var(--secondary);
+            z-index: -2;
+            animation: glitchAfter 4s infinite;
+            clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
         }
         
         @keyframes glitch {
             0%, 90%, 100% { 
-                transform: translate(0);
+                transform: translate(0) perspective(1000px) rotateX(0deg);
                 text-shadow: 3px 3px 0px rgba(0, 255, 204, 0.4),
-                            -3px -3px 0px rgba(0, 153, 255, 0.4);
+                            -3px -3px 0px rgba(0, 153, 255, 0.4),
+                            0 0 30px rgba(0, 255, 204, 0.3);
             }
             92% { 
-                transform: translate(-4px, 4px);
-                text-shadow: 5px -5px var(--primary), -5px 5px var(--secondary);
+                transform: translate(-4px, 4px) perspective(1000px) rotateX(2deg);
+                text-shadow: 5px -5px var(--primary), -5px 5px var(--secondary),
+                            0 0 50px var(--primary);
             }
             94% { 
-                transform: translate(4px, -4px);
-                text-shadow: -5px 5px var(--primary), 5px -5px var(--secondary);
+                transform: translate(4px, -4px) perspective(1000px) rotateX(-2deg);
+                text-shadow: -5px 5px var(--primary), 5px -5px var(--secondary),
+                            0 0 50px var(--secondary);
             }
             96% { 
-                transform: translate(-4px, -4px);
-                text-shadow: 5px 5px var(--primary), -5px -5px var(--secondary);
+                transform: translate(-4px, -4px) perspective(1000px) rotateX(1deg);
+                text-shadow: 5px 5px var(--primary), -5px -5px var(--secondary),
+                            0 0 60px var(--primary);
+            }
+        }
+        
+        @keyframes glitchBefore {
+            0%, 90%, 100% { transform: translate(0); }
+            92% { transform: translate(-2px, 2px); }
+            94% { transform: translate(2px, -2px); }
+            96% { transform: translate(-2px, -2px); }
+        }
+        
+        @keyframes glitchAfter {
+            0%, 90%, 100% { transform: translate(0); }
+            92% { transform: translate(2px, -2px); }
+            94% { transform: translate(-2px, 2px); }
+            96% { transform: translate(2px, 2px); }
+        }
+        
+        @keyframes textGlow {
+            0%, 100% {
+                text-shadow: 3px 3px 0px rgba(0, 255, 204, 0.4),
+                            -3px -3px 0px rgba(0, 153, 255, 0.4),
+                            0 0 30px rgba(0, 255, 204, 0.3);
+            }
+            50% {
+                text-shadow: 3px 3px 0px rgba(0, 255, 204, 0.6),
+                            -3px -3px 0px rgba(0, 153, 255, 0.6),
+                            0 0 60px rgba(0, 255, 204, 0.6),
+                            0 0 90px rgba(0, 255, 204, 0.3);
             }
         }
 
@@ -638,6 +806,43 @@
             padding: 140px 0; 
             position: relative; 
             z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        section.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Page transition overlay */
+        .page-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, rgba(0, 255, 204, 0.1) 50%, var(--bg-dark) 100%);
+            z-index: 9999;
+            transform: translateX(-100%);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            backdrop-filter: blur(10px);
+        }
+        
+        .page-transition.active {
+            transform: translateX(0);
+            pointer-events: all;
+        }
+        
+        .page-transition.exit {
+            transform: translateX(100%);
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .section-title {
@@ -828,6 +1033,66 @@
             box-shadow: 0 0 8px var(--primary);
         }
 
+        /* Advanced gradient animations */
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        .animated-gradient {
+            background: linear-gradient(-45deg, var(--primary), var(--secondary), var(--danger), var(--primary));
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+        
+        /* Floating animation for hero elements */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            33% {
+                transform: translateY(-20px) rotate(2deg);
+            }
+            66% {
+                transform: translateY(10px) rotate(-2deg);
+            }
+        }
+        
+        .float-element {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        /* Advanced text reveal */
+        .text-reveal {
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .text-reveal::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-dark);
+            transform: translateX(-100%);
+            animation: textReveal 1s ease-out forwards;
+        }
+        
+        @keyframes textReveal {
+            to {
+                transform: translateX(100%);
+            }
+        }
+        
         /* Responsive */
         @media(max-width: 768px) {
             .grid-2 { grid-template-columns: 1fr; }
@@ -844,6 +1109,7 @@
     <div id="intro-screen">
         <div class="intro-bg">
             <div class="intro-grid"></div>
+            <div class="intro-particles" id="intro-particles"></div>
         </div>
         
         <div class="terminal-container">
@@ -889,10 +1155,10 @@
             </div>
         </nav>
 
-        <section id="home" class="hero">
+        <section id="home" class="hero active">
             <div class="tilt-card reveal-3d" style="max-width: 950px;">
                 <div class="tilt-content">
-                    <h1 class="glitch-text">LAITH QAISI</h1>
+                    <h1 class="glitch-text" data-text="LAITH QAISI">LAITH QAISI</h1>
                     <div class="typewriter" id="typewriter"></div>
                     <p style="color: var(--text-muted); margin-bottom: 35px; font-size: 1.15rem; line-height: 1.7;">
                         Elite Cybersecurity Operative specialized in Offensive Security, CTF Warfare, and Automated Defense Systems. Ranked Top 30 in IEEE CTF.
@@ -1049,7 +1315,7 @@
 
         <footer>
             <div class="container">
-                <p style="color: #666; font-family: 'Share Tech Mono'; font-size: 1.05rem; letter-spacing: 2px;">© 2023 LAITH QAISI // SYSTEM SECURE // END OF LINE</p>
+                <p style="color: #666; font-family: 'Share Tech Mono'; font-size: 1.05rem; letter-spacing: 2px;">© 2025 LAITH QAISI // SYSTEM SECURE // END OF LINE</p>
             </div>
         </footer>
     </div>
@@ -1058,21 +1324,21 @@
         // ============== EPIC INTRO SEQUENCE ==============
         const hackingLines = [
             { text: '> Initializing quantum encryption protocols...', delay: 100, class: '' },
-            { text: '> Establishing secure connection to target server...', delay: 400, class: '' },
-            { text: '> [OK] SSL handshake completed', delay: 700, class: 'success' },
-            { text: '> Running port scanner: 65535 ports detected', delay: 1000, class: '' },
-            { text: '> [OK] Vulnerability CVE-2024-CYBER identified', delay: 1400, class: 'success' },
-            { text: '> Bypassing firewall [████████░░] 80%', delay: 1800, class: '' },
-            { text: '> [OK] Firewall neutralized', delay: 2100, class: 'success' },
-            { text: '> Injecting payload into system kernel...', delay: 2400, class: '' },
-            { text: '> [WARNING] Intrusion detection triggered', delay: 2800, class: 'warning' },
-            { text: '> Deploying anti-forensic countermeasures...', delay: 3100, class: '' },
-            { text: '> [OK] Traces eliminated', delay: 3500, class: 'success' },
-            { text: '> Extracting authentication tokens...', delay: 3900, class: '' },
-            { text: '> [OK] Admin privileges acquired', delay: 4300, class: 'success' },
-            { text: '', delay: 4600, class: '' },
-            { text: '> ACCESS LEVEL: MAXIMUM', delay: 4800, class: 'success' },
-            { text: '> Initializing portfolio interface...', delay: 5200, class: '' },
+            { text: '> Establishing secure connection to target server...', delay: 200, class: '' },
+            { text: '> [OK] SSL handshake completed', delay: 350, class: 'success' },
+            { text: '> Running port scanner: 65535 ports detected', delay: 500, class: '' },
+            { text: '> [OK] Vulnerability CVE-2024-CYBER identified', delay: 650, class: 'success' },
+            { text: '> Bypassing firewall [████████░░] 80%', delay: 800, class: '' },
+            { text: '> [OK] Firewall neutralized', delay: 1000, class: 'success' },
+            { text: '> Injecting payload into system kernel...', delay: 1200, class: '' },
+            { text: '> [WARNING] Intrusion detection triggered', delay: 1400, class: 'warning' },
+            { text: '> Deploying anti-forensic countermeasures...', delay: 1500, class: '' },
+            { text: '> [OK] Traces eliminated', delay: 1550, class: 'success' },
+            { text: '> Extracting authentication tokens...', delay: 1700, class: '' },
+            { text: '> [OK] Admin privileges acquired', delay: 1800, class: 'success' },
+            { text: '', delay: 2000, class: '' },
+            { text: '> ACCESS LEVEL: MAXIMUM', delay: 2000, class: 'success' },
+            { text: '> Initializing portfolio interface...', delay: 2200, class: '' },
         ];
 
         let lineIndex = 0;
@@ -1142,6 +1408,23 @@
             }, 2000);
         }
 
+        // Create intro particles
+        function createIntroParticles() {
+            const particlesContainer = document.getElementById('intro-particles');
+            if (!particlesContainer) return;
+            
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'intro-particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        createIntroParticles();
+        
         // Start the hacking sequence
         setTimeout(addHackLine, 500);
 
@@ -1327,69 +1610,142 @@
                 });
             });
 
-            // Interactive 3D Background with Scroll Parallax
+            // ============== ADVANCED 3D SCENE WITH MULTIPLE GEOMETRIC SHAPES ==============
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
             const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
             
             renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
             document.getElementById('canvas-container').appendChild(renderer.domElement);
             
-            // Create dynamic network of nodes
-            const geometries = [];
-            const connections = [];
+            // Advanced lighting setup
+            const ambientLight = new THREE.AmbientLight(0x00ffcc, 0.3);
+            scene.add(ambientLight);
             
-            // Create animated nodes
-            for (let i = 0; i < 30; i++) {
-                const size = 0.2 + Math.random() * 0.4;
-                const geometry = new THREE.SphereGeometry(size, 16, 16);
-                const material = new THREE.MeshBasicMaterial({ 
-                    color: i % 3 === 0 ? 0x00ffcc : i % 3 === 1 ? 0x0099ff : 0xffffff,
-                    wireframe: false,
+            const pointLight1 = new THREE.PointLight(0x00ffcc, 1, 100);
+            pointLight1.position.set(20, 20, 20);
+            pointLight1.castShadow = true;
+            scene.add(pointLight1);
+            
+            const pointLight2 = new THREE.PointLight(0x0099ff, 0.8, 100);
+            pointLight2.position.set(-20, -20, -20);
+            scene.add(pointLight2);
+            
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+            directionalLight.position.set(0, 10, 0);
+            scene.add(directionalLight);
+            
+            // Create diverse geometric shapes with morphing
+            const shapes = [];
+            const shapeTypes = ['sphere', 'torus', 'octahedron', 'icosahedron', 'tetrahedron', 'dodecahedron'];
+            const colors = [0x00ffcc, 0x0099ff, 0xffffff, 0xff0055];
+            
+            for (let i = 0; i < 25; i++) {
+                const type = shapeTypes[Math.floor(Math.random() * shapeTypes.length)];
+                let geometry;
+                const size = 0.8 + Math.random() * 1.2;
+                
+                switch(type) {
+                    case 'sphere':
+                        geometry = new THREE.SphereGeometry(size, 32, 32);
+                        break;
+                    case 'torus':
+                        geometry = new THREE.TorusGeometry(size, size * 0.3, 16, 100);
+                        break;
+                    case 'octahedron':
+                        geometry = new THREE.OctahedronGeometry(size, 0);
+                        break;
+                    case 'icosahedron':
+                        geometry = new THREE.IcosahedronGeometry(size, 0);
+                        break;
+                    case 'tetrahedron':
+                        geometry = new THREE.TetrahedronGeometry(size, 0);
+                        break;
+                    case 'dodecahedron':
+                        geometry = new THREE.DodecahedronGeometry(size, 0);
+                        break;
+                }
+                
+                // Create wireframe version
+                const wireframe = new THREE.WireframeGeometry(geometry);
+                const wireframeLine = new THREE.LineSegments(wireframe, new THREE.LineBasicMaterial({
+                    color: colors[i % colors.length],
                     transparent: true,
-                    opacity: 0.7
+                    opacity: 0.6
+                }));
+                
+                // Create solid version
+                const material = new THREE.MeshPhongMaterial({
+                    color: colors[i % colors.length],
+                    transparent: true,
+                    opacity: 0.4,
+                    emissive: colors[i % colors.length],
+                    emissiveIntensity: 0.3,
+                    shininess: 100,
+                    wireframe: false
                 });
-                const sphere = new THREE.Mesh(geometry, material);
                 
-                sphere.position.x = (Math.random() - 0.5) * 50;
-                sphere.position.y = (Math.random() - 0.5) * 50;
-                sphere.position.z = (Math.random() - 0.5) * 50;
+                const mesh = new THREE.Mesh(geometry, material);
+                mesh.castShadow = true;
+                mesh.receiveShadow = true;
                 
-                sphere.userData = {
+                // Combine wireframe and solid
+                const group = new THREE.Group();
+                group.add(mesh);
+                group.add(wireframeLine);
+                
+                group.position.x = (Math.random() - 0.5) * 60;
+                group.position.y = (Math.random() - 0.5) * 60;
+                group.position.z = (Math.random() - 0.5) * 60;
+                
+                group.userData = {
+                    type: type,
+                    originalType: type,
                     velocity: {
-                        x: (Math.random() - 0.5) * 0.015,
-                        y: (Math.random() - 0.5) * 0.015,
-                        z: (Math.random() - 0.5) * 0.015
+                        x: (Math.random() - 0.5) * 0.02,
+                        y: (Math.random() - 0.5) * 0.02,
+                        z: (Math.random() - 0.5) * 0.02
                     },
-                    originalY: sphere.position.y
+                    rotationSpeed: {
+                        x: (Math.random() - 0.5) * 0.02,
+                        y: (Math.random() - 0.5) * 0.02,
+                        z: (Math.random() - 0.5) * 0.02
+                    },
+                    originalY: group.position.y,
+                    morphProgress: 0,
+                    targetType: shapeTypes[Math.floor(Math.random() * shapeTypes.length)]
                 };
                 
-                scene.add(sphere);
-                geometries.push(sphere);
+                scene.add(group);
+                shapes.push(group);
             }
             
-            // Update connections between nodes
+            // Create network connections
+            const connections = [];
             function updateConnections() {
                 connections.forEach(line => scene.remove(line));
                 connections.length = 0;
                 
-                for (let i = 0; i < geometries.length; i++) {
-                    for (let j = i + 1; j < geometries.length; j++) {
-                        const dist = geometries[i].position.distanceTo(geometries[j].position);
+                for (let i = 0; i < shapes.length; i++) {
+                    for (let j = i + 1; j < shapes.length; j++) {
+                        const dist = shapes[i].position.distanceTo(shapes[j].position);
                         
-                        if (dist < 12) {
+                        if (dist < 15) {
                             const lineGeometry = new THREE.BufferGeometry();
                             const positions = new Float32Array([
-                                geometries[i].position.x, geometries[i].position.y, geometries[i].position.z,
-                                geometries[j].position.x, geometries[j].position.y, geometries[j].position.z
+                                shapes[i].position.x, shapes[i].position.y, shapes[i].position.z,
+                                shapes[j].position.x, shapes[j].position.y, shapes[j].position.z
                             ]);
                             lineGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
                             
+                            const opacity = 0.4 * (1 - dist / 15);
                             const lineMaterial = new THREE.LineBasicMaterial({ 
                                 color: 0x00ffcc,
                                 transparent: true,
-                                opacity: 0.25 * (1 - dist / 12)
+                                opacity: opacity
                             });
                             
                             const line = new THREE.Line(lineGeometry, lineMaterial);
@@ -1400,88 +1756,201 @@
                 }
             }
             
-            // Add particle field
+            // Enhanced particle system
             const particlesGeometry = new THREE.BufferGeometry();
-            const particlesCount = 1500;
+            const particlesCount = 3000;
             const posArray = new Float32Array(particlesCount * 3);
+            const velArray = new Float32Array(particlesCount * 3);
+            const colorArray = new Float32Array(particlesCount * 3);
             
-            for(let i = 0; i < particlesCount * 3; i++) {
-                posArray[i] = (Math.random() - 0.5) * 120;
+            for(let i = 0; i < particlesCount * 3; i += 3) {
+                posArray[i] = (Math.random() - 0.5) * 150;
+                posArray[i + 1] = (Math.random() - 0.5) * 150;
+                posArray[i + 2] = (Math.random() - 0.5) * 150;
+                
+                velArray[i] = (Math.random() - 0.5) * 0.02;
+                velArray[i + 1] = (Math.random() - 0.5) * 0.02;
+                velArray[i + 2] = (Math.random() - 0.5) * 0.02;
+                
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                colorArray[i] = ((color >> 16) & 255) / 255;
+                colorArray[i + 1] = ((color >> 8) & 255) / 255;
+                colorArray[i + 2] = (color & 255) / 255;
             }
             
             particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colorArray, 3));
             
             const particlesMaterial = new THREE.PointsMaterial({
-                size: 0.08,
-                color: 0x00ffcc,
+                size: 0.1,
+                vertexColors: true,
                 transparent: true,
-                opacity: 0.6,
-                blending: THREE.AdditiveBlending
+                opacity: 0.8,
+                blending: THREE.AdditiveBlending,
+                sizeAttenuation: true
             });
             
             const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
             scene.add(particlesMesh);
             
-            camera.position.z = 45;
+            // Create floating geometric orbs in hero section
+            const heroShapes = [];
+            for (let i = 0; i < 8; i++) {
+                const geometry = new THREE.IcosahedronGeometry(1.5, 0);
+                const material = new THREE.MeshPhongMaterial({
+                    color: i % 2 === 0 ? 0x00ffcc : 0x0099ff,
+                    transparent: true,
+                    opacity: 0.3,
+                    wireframe: true,
+                    emissive: i % 2 === 0 ? 0x00ffcc : 0x0099ff,
+                    emissiveIntensity: 0.5
+                });
+                const mesh = new THREE.Mesh(geometry, material);
+                
+                mesh.position.set(
+                    (Math.random() - 0.5) * 30,
+                    (Math.random() - 0.5) * 30,
+                    (Math.random() - 0.5) * 30
+                );
+                
+                mesh.userData = {
+                    rotationSpeed: {
+                        x: (Math.random() - 0.5) * 0.01,
+                        y: (Math.random() - 0.5) * 0.01,
+                        z: (Math.random() - 0.5) * 0.01
+                    },
+                    floatSpeed: Math.random() * 0.02 + 0.01
+                };
+                
+                scene.add(mesh);
+                heroShapes.push(mesh);
+            }
+            
+            camera.position.z = 50;
             camera.position.y = 5;
             
-            // Mouse movement effect
+            // Mouse and scroll interaction
             let targetX = 0;
             let targetY = 0;
             let scrollOffset = 0;
+            let mouse3DX = 0;
+            let mouse3DY = 0;
             
             document.addEventListener('mousemove', (event) => {
+                mouse3DX = event.clientX;
+                mouse3DY = event.clientY;
                 targetX = (event.clientX / window.innerWidth) * 2 - 1;
                 targetY = -(event.clientY / window.innerHeight) * 2 + 1;
             });
             
-            // Scroll parallax effect
             window.addEventListener('scroll', () => {
                 scrollOffset = window.pageYOffset * 0.003;
             });
             
-            // Animation loop with scroll parallax
+            // Advanced animation loop
             let frameCount = 0;
             function animateThree() {
                 requestAnimationFrame(animateThree);
                 frameCount++;
                 
-                // Animate nodes with parallax
-                geometries.forEach((sphere, index) => {
-                    // Move nodes
-                    sphere.position.x += sphere.userData.velocity.x;
-                    sphere.position.y += sphere.userData.velocity.y;
-                    sphere.position.z += sphere.userData.velocity.z;
+                // Animate main shapes
+                shapes.forEach((group, index) => {
+                    const data = group.userData;
                     
-                    // Bounce off boundaries
-                    if (Math.abs(sphere.position.x) > 25) sphere.userData.velocity.x *= -1;
-                    if (Math.abs(sphere.position.y) > 25) sphere.userData.velocity.y *= -1;
-                    if (Math.abs(sphere.position.z) > 25) sphere.userData.velocity.z *= -1;
+                    // Movement
+                    group.position.x += data.velocity.x;
+                    group.position.y += data.velocity.y;
+                    group.position.z += data.velocity.z;
+                    
+                    // Bounce boundaries
+                    if (Math.abs(group.position.x) > 30) data.velocity.x *= -1;
+                    if (Math.abs(group.position.y) > 30) data.velocity.y *= -1;
+                    if (Math.abs(group.position.z) > 30) data.velocity.z *= -1;
+                    
+                    // Rotation
+                    group.rotation.x += data.rotationSpeed.x;
+                    group.rotation.y += data.rotationSpeed.y;
+                    group.rotation.z += data.rotationSpeed.z;
+                    
+                    // Morphing animation (periodic shape changes)
+                    if (frameCount % 600 === 0 && Math.random() > 0.7) {
+                        data.targetType = shapeTypes[Math.floor(Math.random() * shapeTypes.length)];
+                        data.morphProgress = 0;
+                    }
+                    
+                    // Scroll parallax
+                    group.position.y = data.originalY + scrollOffset * (index % 4 + 1) * 8;
                     
                     // Pulse effect
-                    const scale = 1 + Math.sin(frameCount * 0.03 + index) * 0.3;
-                    sphere.scale.set(scale, scale, scale);
+                    const pulse = 1 + Math.sin(frameCount * 0.02 + index) * 0.2;
+                    group.scale.set(pulse, pulse, pulse);
                     
-                    // Scroll parallax - nodes move with scroll
-                    sphere.position.y = sphere.userData.originalY + scrollOffset * (index % 3 + 1) * 10;
+                    // Enhanced mouse interaction - shapes react to mouse with stronger effect
+                    const mouseInfluence = 0.0003;
+                    const dx = (mouse3DX - window.innerWidth / 2) * mouseInfluence;
+                    const dy = (mouse3DY - window.innerHeight / 2) * mouseInfluence;
+                    group.position.x += dx * 0.5;
+                    group.position.y += dy * 0.5;
+                    
+                    // Add rotation based on mouse position
+                    const rotX = (mouse3DY - window.innerHeight / 2) * 0.0001;
+                    const rotY = (mouse3DX - window.innerWidth / 2) * 0.0001;
+                    group.rotation.x += rotX;
+                    group.rotation.y += rotY;
                 });
                 
+                // Animate hero shapes
+                heroShapes.forEach((mesh, index) => {
+                    mesh.rotation.x += mesh.userData.rotationSpeed.x;
+                    mesh.rotation.y += mesh.userData.rotationSpeed.y;
+                    mesh.rotation.z += mesh.userData.rotationSpeed.z;
+                    
+                    // Floating animation
+                    mesh.position.y += Math.sin(frameCount * 0.01 + index) * mesh.userData.floatSpeed;
+                    mesh.position.x += Math.cos(frameCount * 0.015 + index) * mesh.userData.floatSpeed * 0.5;
+                    
+                    // Scale pulse
+                    const scale = 1 + Math.sin(frameCount * 0.03 + index) * 0.3;
+                    mesh.scale.set(scale, scale, scale);
+                });
+                
+                // Animate particles
+                const positions = particlesGeometry.attributes.position.array;
+                for (let i = 0; i < particlesCount * 3; i += 3) {
+                    positions[i] += velArray[i];
+                    positions[i + 1] += velArray[i + 1];
+                    positions[i + 2] += velArray[i + 2];
+                    
+                    // Reset if out of bounds
+                    if (Math.abs(positions[i]) > 75) velArray[i] *= -1;
+                    if (Math.abs(positions[i + 1]) > 75) velArray[i + 1] *= -1;
+                    if (Math.abs(positions[i + 2]) > 75) velArray[i + 2] *= -1;
+                }
+                particlesGeometry.attributes.position.needsUpdate = true;
+                
+                // Rotate particles
+                particlesMesh.rotation.y += 0.0005;
+                particlesMesh.rotation.x = scrollOffset * 0.3;
+                
                 // Update connections
-                if (frameCount % 3 === 0) {
+                if (frameCount % 2 === 0) {
                     updateConnections();
                 }
                 
-                // Rotate particles with parallax
-                particlesMesh.rotation.y += 0.0003;
-                particlesMesh.rotation.x = scrollOffset * 0.5;
+                // Animate lights
+                pointLight1.position.x = Math.sin(frameCount * 0.01) * 25;
+                pointLight1.position.y = Math.cos(frameCount * 0.015) * 25;
+                pointLight2.position.x = Math.cos(frameCount * 0.012) * -25;
+                pointLight2.position.y = Math.sin(frameCount * 0.018) * -25;
                 
-                // Camera follow mouse and scroll
-                camera.position.x += (targetX * 6 - camera.position.x) * 0.05;
-                camera.position.y += (targetY * 6 - camera.position.y + scrollOffset * 15) * 0.05;
+                // Camera movement
+                camera.position.x += (targetX * 8 - camera.position.x) * 0.05;
+                camera.position.y += (targetY * 8 - camera.position.y + scrollOffset * 20) * 0.05;
                 camera.lookAt(scene.position);
                 
-                // Rotate entire scene based on scroll
-                scene.rotation.y = scrollOffset * 0.3;
+                // Scene rotation
+                scene.rotation.y = scrollOffset * 0.2;
+                scene.rotation.x = scrollOffset * 0.1;
                 
                 renderer.render(scene, camera);
             }
@@ -1580,20 +2049,64 @@
                 };
             }
             
-            // Section transition effects
+            // Advanced section transition effects with page transitions
             const sections = document.querySelectorAll('section');
+            
+            // Activate first section immediately
+            if (sections.length > 0) {
+                sections[0].classList.add('active');
+            }
+            
             const sectionObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
+                        entry.target.classList.add('active', 'visible');
+                        
                         // Create burst effect when section comes into view
                         createSectionBurst(entry.target);
+                        
+                        // Trigger card animations
+                        const cards = entry.target.querySelectorAll('.tilt-card');
+                        cards.forEach((card, index) => {
+                            setTimeout(() => {
+                                card.style.animation = 'cardEntrance 0.8s ease-out forwards';
+                            }, index * 100);
+                        });
+                        
+                        // Reveal 3D elements
+                        const revealElements = entry.target.querySelectorAll('.reveal-3d');
+                        revealElements.forEach((el, index) => {
+                            setTimeout(() => {
+                                el.classList.add('active');
+                            }, index * 150);
+                        });
+                    } else {
+                        // Optional: remove active class when out of view
+                        // entry.target.classList.remove('active');
                     }
                 });
             }, {
-                threshold: 0.3
+                threshold: 0.15,
+                rootMargin: '0px 0px -50px 0px'
             });
             
             sections.forEach(section => sectionObserver.observe(section));
+            
+            // Add card entrance animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes cardEntrance {
+                    from {
+                        opacity: 0;
+                        transform: translateY(30px) scale(0.9);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0) scale(1);
+                    }
+                }
+            `;
+            document.head.appendChild(style);
             
             function createSectionBurst(section) {
                 const rect = section.getBoundingClientRect();
@@ -1647,42 +2160,80 @@
                 });
             });
             
-            // Smooth scroll with custom easing
+            // Enhanced smooth scroll with page transitions
+            function smoothScrollTo(targetElement, duration = 1200) {
+                const targetPosition = targetElement.offsetTop;
+                const startPosition = window.pageYOffset;
+                const distance = targetPosition - startPosition;
+                let start = null;
+                
+                // Create page transition overlay
+                const transition = document.createElement('div');
+                transition.className = 'page-transition';
+                document.body.appendChild(transition);
+                
+                // Activate transition
+                setTimeout(() => {
+                    transition.classList.add('active');
+                }, 10);
+                
+                function animation(currentTime) {
+                    if (start === null) start = currentTime;
+                    const timeElapsed = currentTime - start;
+                    const progress = Math.min(timeElapsed / duration, 1);
+                    
+                    // Easing function (easeInOutCubic)
+                    const ease = progress < 0.5
+                        ? 4 * progress * progress * progress
+                        : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+                    
+                    const run = startPosition + distance * ease;
+                    window.scrollTo(0, run);
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(animation);
+                    } else {
+                        // Exit transition
+                        setTimeout(() => {
+                            transition.classList.add('exit');
+                            setTimeout(() => {
+                                transition.remove();
+                            }, 600);
+                        }, 100);
+                    }
+                }
+                
+                requestAnimationFrame(animation);
+                
+                // Create trail particles during scroll
+                for (let i = 0; i < 30; i++) {
+                    setTimeout(() => createScrollSparkle(), i * 30);
+                }
+            }
+            
+            // Apply to all anchor links
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
                     const target = document.querySelector(this.getAttribute('href'));
                     if (target) {
-                        const targetPosition = target.offsetTop - 80;
-                        const startPosition = window.pageYOffset;
-                        const distance = targetPosition - startPosition;
-                        const duration = 1500;
-                        let start = null;
-                        
-                        function animation(currentTime) {
-                            if (start === null) start = currentTime;
-                            const timeElapsed = currentTime - start;
-                            const run = ease(timeElapsed, startPosition, distance, duration);
-                            window.scrollTo(0, run);
-                            if (timeElapsed < duration) requestAnimationFrame(animation);
-                        }
-                        
-                        function ease(t, b, c, d) {
-                            t /= d / 2;
-                            if (t < 1) return c / 2 * t * t * t + b;
-                            t -= 2;
-                            return c / 2 * (t * t * t + 2) + b;
-                        }
-                        
-                        requestAnimationFrame(animation);
-                        
-                        // Create trail particles during scroll
-                        for (let i = 0; i < 20; i++) {
-                            setTimeout(() => createScrollSparkle(), i * 50);
-                        }
+                        smoothScrollTo(target, 1200);
                     }
                 });
             });
+            
+            // Special handling for INITIATE UPLINK button - faster, smoother scroll
+            const initiateBtn = document.querySelector('a[href="#contact"], #initiate-uplink');
+            if (initiateBtn) {
+                initiateBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const contactSection = document.querySelector('#contact');
+                    if (contactSection) {
+                        // Faster, smoother scroll with transition
+                        smoothScrollTo(contactSection, 1000);
+                    }
+                });
+            }
             
             // Add glow effect on hover for all interactive elements
             const interactiveElements = document.querySelectorAll('a, button, .tilt-card, .timeline-dot');
@@ -1732,7 +2283,12 @@
                 document.documentElement.style.setProperty('--primary', `hsl(${hue}, 100%, 60%)`);
             });
             
-            // Contact Form Handler
+            // Initialize EmailJS
+            (function() {
+                emailjs.init("jR4Z3An_TGvL0BY3W"); // Replace with your EmailJS public key
+            })();
+            
+            // Contact Form Handler - Direct Email Sending
             const contactForm = document.getElementById('contact-form');
             contactForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
@@ -1752,24 +2308,23 @@
                 formStatus.style.color = 'var(--primary)';
                 formStatus.textContent = '[ ENCODING MESSAGE ]';
                 
-                // Create mailto link
-                const subject = encodeURIComponent(`Portfolio Contact from ${name}`);
-                const body = encodeURIComponent(
-                    `Name: ${name}\n` +
-                    `Email: ${email}\n\n` +
-                    `Message:\n${message}`
-                );
+                // Prepare email parameters (simple format matching old mailto structure)
+                const templateParams = {
+                    name: name,
+                    email: email,
+                    message: message,
+                    subject: `Portfolio Contact from ${name}`
+                };
                 
-                const mailtoLink = `mailto:laith.qaisi2004@gmail.com?subject=${subject}&body=${body}`;
-                
-                // Open email client
-                window.location.href = mailtoLink;
-                
-                // Show success message
-                setTimeout(() => {
+                // Send email using EmailJS
+                try {
+                    // Replace 'YOUR_SERVICE_ID' and 'YOUR_TEMPLATE_ID' with your actual EmailJS IDs
+                    const response = await emailjs.send('service_92pkt6y', 'template_notf46l', templateParams);
+                    
+                    // Show success message
                     btnText.innerHTML = '<i class="fas fa-check"></i> TRANSMITTED';
                     formStatus.style.color = '#27c93f';
-                    formStatus.textContent = '[ ✓ EMAIL CLIENT OPENED - PLEASE SEND ]';
+                    formStatus.textContent = '[ ✓ MESSAGE SUCCESSFULLY DELIVERED ]';
                     
                     // Reset form after delay
                     setTimeout(() => {
@@ -1778,7 +2333,20 @@
                         btnText.textContent = 'SEND DATA';
                         formStatus.textContent = '';
                     }, 4000);
-                }, 1000);
+                } catch (error) {
+                    // Show error message
+                    btnText.innerHTML = '<i class="fas fa-exclamation-triangle"></i> RETRY';
+                    formStatus.style.color = '#ff5f56';
+                    formStatus.textContent = '[ ✗ TRANSMISSION FAILED - PLEASE RETRY ]';
+                    
+                    // Re-enable button
+                    setTimeout(() => {
+                        submitBtn.disabled = false;
+                        btnText.textContent = 'SEND DATA';
+                    }, 3000);
+                    
+                    console.error('EmailJS Error:', error);
+                }
             });
         }
 
