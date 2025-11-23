@@ -54,12 +54,12 @@ To run this portfolio locally on your machine:
 
 1.  **Clone the Repository**
     ```bash
-    git clone [https://github.com/cer04/your-repo-name.git](https://github.com/cer04/your-repo-name.git)
+    git clone [https://github.com/cer04/your-repo-name.git](https://github.com/cer04/Laith-portfolio)
     ```
 
 2.  **Navigate to the Directory**
     ```bash
-    cd your-repo-name
+    cd Laith-portfolio
     ```
 
 3.  **Launch**
@@ -73,4 +73,3 @@ To run this portfolio locally on your machine:
 /
 ├── index.html          # The main core file containing HTML, CSS, and JS
 ├── README.md           # Project documentation
-└── assets/             # (Optional) Folder for images if you add them later
