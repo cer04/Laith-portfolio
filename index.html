@@ -2285,7 +2285,7 @@
             
             // Initialize EmailJS
             (function() {
-                emailjs.init("jR4Z3An_TGvL0BY3W"); // Replace with your EmailJS public key
+                emailjs.init("public key"); // Replace with your EmailJS public key
             })();
             
             // Contact Form Handler - Direct Email Sending
@@ -2319,7 +2319,7 @@
                 // Send email using EmailJS
                 try {
                     // Replace 'YOUR_SERVICE_ID' and 'YOUR_TEMPLATE_ID' with your actual EmailJS IDs
-                    const response = await emailjs.send('service_92pkt6y', 'template_notf46l', templateParams);
+                    const response = await emailjs.send('service_ID', 'template_ID', templateParams);
                     
                     // Show success message
                     btnText.innerHTML = '<i class="fas fa-check"></i> TRANSMITTED';
@@ -2359,4 +2359,5 @@
         }
     </script>
 </body>
+
 </html>
