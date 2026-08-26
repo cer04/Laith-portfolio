@@ -1,14 +1,17 @@
 # 🛡️ Cyber Warfare Portfolio - Laith Qaisi
 
 ![Project Status](https://img.shields.io/badge/Status-Operational-00ffcc?style=for-the-badge)
-![Security Clearance](https://img.shields.io/badge/Clearance-Top%20Secret-ff0055?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
 
-> **"In a world where data is the new currency, I serve as a digital guardian."**
+> Personal portfolio of Laith Qaisi — Cybersecurity graduate (BSc, Amman Arab University), SOC analysis / penetration testing / full-stack development. Amman, Jordan.
 
-A futuristic, immersive personal portfolio website designed for a Cybersecurity Specialist and Pentester. This project utilizes advanced front-end techniques to create a "Cyber Warfare" aesthetic, featuring a terminal-style boot sequence, 3D particle environments, and glassmorphism UI elements.
+A single-page portfolio with a cyber aesthetic. This project utilizes advanced front-end techniques to create a "Cyber Warfare" aesthetic, featuring a terminal-style boot sequence, 3D particle environments, and glassmorphism UI elements.
 
 ---
+
+## 🔗 Links
+* **LinkedIn:** https://www.linkedin.com/in/laith-alqaisi-38a802308/
+* **GitHub:** https://github.com/cer04
 
 ## 🖥️ Live Demo
 [**// INITIATE UPLINK (View Live Site)**](https://cer04.github.io/Laith-portfolio)
@@ -17,9 +20,9 @@ A futuristic, immersive personal portfolio website designed for a Cybersecurity 
 
 ## ⚡ Features
 
-### 🔓 The "Hacking" Intro Sequence
-* **Simulated Terminal:** A JavaScript-driven boot sequence that mimics a kernel injection and firewall bypass before granting access to the site.
-* **Loading Bar:** Dynamic asset loading simulation.
+### 🔓 Boot Intro
+* **Short terminal sequence:** ~2 seconds total; click, tap or press any key to skip straight into the site.
+* **Loading Bar:** Quick asset loading indicator.
 * **Transition:** Seamless fade from the terminal into the 3D environment.
 
 ### 🕸️ Immersive Visuals
@@ -31,7 +34,7 @@ A futuristic, immersive personal portfolio website designed for a Cybersecurity 
 ### 🛠️ Interactive UI
 * **Custom Cursor:** A ring-and-dot cursor with trail effects that expands when hovering over interactive elements.
 * **Scroll Progress:** A top-bar reading indicator and a floating scan-line that tracks page depth.
-* **Typewriter Effect:** dynamic text cycling through skills (Ethical Hacker, CTF Champion, etc.).
+* **Typewriter Effect:** cycles through roles (SOC Analyst, Penetration Tester, Full-Stack Developer, Automation Engineer).
 
 ---
 
@@ -72,4 +75,5 @@ To run this portfolio locally on your machine:
 ```text
 /
 ├── index.html          # The main core file containing HTML, CSS, and JS
+├── Laith_Qaisi_CV.pdf   # CV linked from the hero "DOWNLOAD CV" button
 ├── README.md           # Project documentation
